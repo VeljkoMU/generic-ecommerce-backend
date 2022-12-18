@@ -5,6 +5,7 @@ const tokenManager = require("../utils/token-manager")
 const validateToken = async function(req, res, next){
     let token = req.body.token
     if(!token){
+        console.log(7)
         res.status(400).end()
         return
     }

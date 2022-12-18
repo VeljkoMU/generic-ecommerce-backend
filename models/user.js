@@ -1,7 +1,6 @@
 let mongoose = require("mongoose")
 
 let UserShema = mongoose.Schema({
-    _id: mongoose.Types.ObjectId,
     name: String,
     surname: String,
     address: String,

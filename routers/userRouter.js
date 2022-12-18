@@ -17,9 +17,11 @@ userRouter.post("/", validateUser, (req, res) =>{
     }
     databaseManager.insertUser(user)
     .then(()=>{
+        console.log("heret")
         res.status(200).end()
     })
-    .catch(()=>{
+    .catch((err)=>{
+        console.log(err)
         res.status(500).end()
     })
 })

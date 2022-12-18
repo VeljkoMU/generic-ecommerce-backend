@@ -1,6 +1,6 @@
 const mongoose = require("mongoose")
 
-let connectionString = process.env.MONGO_DB_CONNESTION_STRING || ""
+let connectionString = process.env.MONGO_DB_CONNESTION_STRING || "mongodb://localhost/generictest"
 
 let initMongoConnection = function(initCallback){
 mongoose.connect(connectionString, ()=>{

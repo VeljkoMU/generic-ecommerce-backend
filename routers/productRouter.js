@@ -1,5 +1,6 @@
 const express = require("express")
 const databaseManager = require("../db/database-manager")
+const ProductModel = require("../models/product")
 
 const productRouter = express.Router()
 
@@ -16,6 +17,12 @@ productRouter.get("/category", async (req, res)=>{
         return
     }
 
+    products = {
+        docs: products.docs,
+        hasNextPage: products.hasNextPage,
+        hasPrevPage: products.hasPrevPage
+    }
+
     res.json(products).status(200).end()
 })
 
@@ -30,6 +37,12 @@ productRouter.get("/tag", async (req, res)=>{
     if(!products){
         res.status(500).end()
         return
+    }
+
+    products = {
+        docs: products.docs,
+        hasNextPage: products.hasNextPage,
+        hasPrevPage: products.hasPrevPage
     }
 
     res.json(products).status(200).end()

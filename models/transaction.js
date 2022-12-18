@@ -2,8 +2,7 @@ const mongoose = require("mongoose")
 const ProductModel = require("./product")
 
 const TransactionSchema = new mongoose.Schema({
-    _id: mongoose.Types.ObjectId,
-    userId: [{type: Number, index: true}],
+    userId: [{type: String, index: true}],
     userName: String,
     userSurname: String,
     address: String,
@@ -12,7 +11,7 @@ const TransactionSchema = new mongoose.Schema({
     typeOfPayment:String,
     typeOfDelivery: String,
     products: [{
-        productId: Number,
+        productId: String,
         productName: String,
         price: Number
     }],

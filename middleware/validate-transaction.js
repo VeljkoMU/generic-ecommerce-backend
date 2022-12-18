@@ -2,7 +2,8 @@ const databaseManager = require("../db/database-manager")
 
 
 const validateTransaction = function(req, res, next){
-    if(!validateUserData || !validateTransactionData || validateProducts){
+    console.log(1)
+    if(!validateUserData(req.body) || !validateTransactionData(req.body) || !validateProducts){
         res.status(400).end()
         return
     }
@@ -11,6 +12,7 @@ const validateTransaction = function(req, res, next){
 }
 
 function validateUserData(body){
+    console.log(1)
     if(!body.userId 
         || !body.userName 
         || !body.userSurname 
@@ -21,6 +23,7 @@ function validateUserData(body){
 }
 
 function validateTransactionData(body){
+    console.log(2)
     if(!body.contactEmail
         || !body.contactPhone
         || !body.typeOfPayment
@@ -33,6 +36,7 @@ function validateTransactionData(body){
 }
 
 async function validateProducts(body){
+    console.log(3)
     if(!body.products || body.products.length === 0)
         return false
     
@@ -41,6 +45,7 @@ async function validateProducts(body){
             return false
         
         let productInDb = await databaseManager.getProductById(product.productId)
+        console.log(productInDb)
         if(!productInDb || !productInDb.isAvailable)
             return false
     }

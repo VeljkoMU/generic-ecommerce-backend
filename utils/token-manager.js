@@ -26,7 +26,7 @@ class TokenManager{
 
     async registerToken(token){
         await TokenModel.create({
-            token: result,
+            token: token,
             authLevel: "user"
         })
     }

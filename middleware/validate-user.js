@@ -6,10 +6,12 @@ const validateUser = function(req, res, next){
         || !req.body.address
         || !req.body.password
         || !req.body.phone
-        || !req.body.email)
-            return false
+        || !req.body.email){
+            res.status(400).end()
+            return
+        }
     
-    return true
+    next()
 }
 
 module.exports = validateUser

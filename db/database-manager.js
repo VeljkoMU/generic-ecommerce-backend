@@ -56,8 +56,7 @@ class DatabaseManager {
     }
 
     async getAllProducts(pageNum){
-        const skipParam = (pageNum - 1) * 10
-        return await ProductModel.find({}, {skip: skipParam, limit: 10})
+        return await ProductModel.paginate({}, {page: pageNum, limit: 10})
     }
 
     async getProductById(productId){
@@ -65,13 +64,11 @@ class DatabaseManager {
     }
 
     async getProductsByCategory(category, pageNum){
-        const skipParam = (pageNum - 1) * 10
-        return await ProductModel.find({categories: category}, {skip: skipParam, limit: 10})
+        return await ProductModel.paginate({categories: category}, {page: pageNum, limit: 10})
     }
 
     async getProductsByTag(tag, pageNum){
-        const skipParam = (pageNum - 1) * 10
-        return await ProductModel.find({tags: category}, {tag: skipParam, limit: 10})
+        return await ProductModel.paginate({tags: tag}, {page: pageNum, limit: 10})
 
     }
 
