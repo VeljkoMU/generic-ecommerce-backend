@@ -1,6 +1,7 @@
 const ProductModel = require("../models/product")
 const TransactionModel = require("../models/transaction")
 const UserModel = require("../models/user")
+const dataEncryption = require("../utils/data-encryption")
 
 class DatabaseManager {
     constructor(){
@@ -51,8 +52,22 @@ class DatabaseManager {
             photos: product.photos,
             rating: 0,
             categories: product.categories,
-            tags: product.tags
+            tags: product.tags,
+            timesRated: 0
         })
+    }
+
+    async rateProduct(rating, productId){
+        let product = await ProductModel.findById(productId)
+
+        if(!product)
+            return false
+
+        product.timesRated = product.timesRated + 1
+        product.rating = (product.rating + rating) / product.timesRated
+
+        product.save()
+        return true
     }
 
     async getAllProducts(pageNum){

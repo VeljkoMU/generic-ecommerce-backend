@@ -7,6 +7,7 @@ const generateCurrentDateTimeString = require("../utils/generate-current-datetim
 
 const transactionRouter = express.Router()
 const emailService = require("../utils/email-service")
+const EthereumTransationManager = require("../utils/ethereum-transaction-manager")
 
 transactionRouter.post("/buy", validateToken, validateTransaction, (req, res)=>{
     let currentDateTime = generateCurrentDateTimeString()
@@ -15,11 +16,11 @@ transactionRouter.post("/buy", validateToken, validateTransaction, (req, res)=>{
     
     let transaction = {
         userId: req.body.userId,
-        userName: req.body.userName,
-        userSurname: req.body.userSurname,
-        address: req.body.address,
-        contactEmail: req.body.contactEmail,
-        contactPhone: req.body.contactPhone,
+        userName: dataEnryption.encrypt(req.body.userName),
+        userSurname: dataEnryption.encrypt(req.body.userSurname),
+        address: dataEnryption.encrypt(req.body.address),
+        contactEmail: dataEnryption.encrypt(req.body.contactEmail),
+        contactPhone: dataEnryption.encrypt(req.body.contactPhone),
         typeOfPayment: req.body.typeOfPayment,
         typeOfDelivery: req.body.typeOfDelivery,
         products: req.body.products,
@@ -44,10 +45,47 @@ transactionRouter.get("/all", (req, res)=>{
     .then((data)=>{
         if(!data)
             res.status(500).end()
+
+        data = {
+            ...data,
+            userName: dataEnryption.decrypt(userName),
+            userSurname: dataEnryption.decrypt(userSurname),
+             address: dataEnryption.decrypt(address),
+             contactEmail: dataEnryption.decrypt(contactEmail),
+             contactPhone: dataEnryption.decrypt(contactPhone)
+        }
+        
         res.json(data).status(200).end()
     })
     .catch(()=>{
         res.status(500).end()
+    })
+})
+
+transactionRouter.get("/checkEthTransaction", (req, res) => {
+    let clientAddress = req.query.address
+    if(!clientAddress){
+        res.status(400).end()
+        return
+    }
+
+    const manager = new EthereumTransationManager()
+    manager.init("", "")
+
+    let txCounter = 0
+    manager.checkForTransation(clientAddress, (isValid)=>{
+        if(isValid){
+            res.status(200).end()
+            return
+        }
+        else {
+            if(txCounter===20) {
+                res.status(405).end()
+                manager.cancel()
+                return
+            }
+            txCounter++
+        }
     })
 })
 

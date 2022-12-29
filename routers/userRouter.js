@@ -5,29 +5,28 @@ const userRouter = express.Router()
 const databaseManager = require("../db/database-manager")
 const validateUser = require("../middleware/validate-user")
 const tokenManager = require("../utils/token-manager")
+const dataEnryption = require("../utils/data-encryption")
 
 userRouter.post("/", validateUser, (req, res) =>{
     const user = {
-        name: req.body.name,
-            surname: req.body.surname,
-            address: req.body.address,
+        name: dataEnryption.encrypt(req.body.name),
+            surname: dataEnryption.encrypt(req.body.surname),
+            address: dataEnryption.encrypt(req.body.address),
             password: md5(req.body.password),
-            phone: req.body.phone,
-            email: req.body.email
+            phone: dataEnryption.encrypt(req.body.phone),
+            email: dataEnryption.encrypt(req.body.email)
     }
     databaseManager.insertUser(user)
     .then(()=>{
-        console.log("heret")
         res.status(200).end()
     })
     .catch((err)=>{
-        console.log(err)
         res.status(500).end()
     })
 })
 
 userRouter.post("/login", async (req, res)=>{
-    let user = await databaseManager.getUserByEmail(req.body.email)
+    let user = await databaseManager.getUserByEmail(dataEnryption.encrypt(req.body.email))
     if(user === undefined){
         res.status(404).end()
         return

@@ -6,6 +6,7 @@ let path = require("path")
 const productRouter = require("./routers/productRouter")
 const transactionRouter = require("./routers/transactionRouter")
 const emailService = require("./utils/email-service")
+const dataEncryption = require("./utils/data-encryption")
 
 let app = express()
 

@@ -1,5 +1,6 @@
 const express = require("express")
 const databaseManager = require("../db/database-manager")
+const validateToken = require("../middleware/validate-token")
 const ProductModel = require("../models/product")
 
 const productRouter = express.Router()
@@ -57,6 +58,22 @@ productRouter.get("/", async (req, res)=>{
     }
 
     res.json(products).status(200).end()    
+})
+
+productRouter.post("/rate", validateToken, async(req, res) => {
+    if(!req.body.rating 
+        || req.body.rating >5 
+        || req.body.rating <1 
+        || !req.body.productId) {
+            res.status(400).end()
+            return
+        }
+    
+    const result = await databaseManager.rateProduct(req.body.rating, req.body.productId)
+    if(result)
+        res.status(200).end()
+    else
+        res.status(500).end()
 })
 
 

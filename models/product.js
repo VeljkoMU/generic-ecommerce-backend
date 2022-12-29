@@ -9,7 +9,8 @@ const ProductSchema = new mongoose.Schema({
     photos: [String],
     rating: Number,
     categories: [String],
-    tags: [String]
+    tags: [String],
+    timesRates: Number
 })
 
 ProductSchema.plugin(mongoosePaginate)
